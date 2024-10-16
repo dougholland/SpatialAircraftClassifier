@@ -25,6 +25,8 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            Spacer()
+            
             PhotosPicker(selection: $photosPickerItem, matching: .images) {
                 Text("Select a photo")
             }
@@ -45,6 +47,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .padding(20)
             
             if let image = image {
                 image
@@ -52,6 +55,8 @@ struct ContentView: View {
                     .scaledToFit()
                     .padding()
             }
+            
+            Spacer()
         }
     }
     
