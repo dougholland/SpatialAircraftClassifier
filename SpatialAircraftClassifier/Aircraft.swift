@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Aircraft: String, CaseIterable {
+enum Aircraft: String, CaseIterable, Codable {
     case f15 = "F-15"
     
     case f16 = "F-16"
