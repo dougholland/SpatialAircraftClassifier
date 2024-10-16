@@ -9,25 +9,21 @@ import SwiftUI
 
 @main
 struct SpatialAircraftClassifierApp: App {
-
-    @State private var appModel = AppModel()
-
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "main") {
             ContentView()
-                .environment(appModel)
         }
-
-        ImmersiveSpace(id: appModel.immersiveSpaceID) {
-            ImmersiveView()
-                .environment(appModel)
-                .onAppear {
-                    appModel.immersiveSpaceState = .open
-                }
-                .onDisappear {
-                    appModel.immersiveSpaceState = .closed
-                }
+        
+        WindowGroup(id: "aircraftClassificationView", for: Aircraft.self) { aircraft in
+            AircraftClassificationView(aircraft: aircraft)
         }
-        .immersionStyle(selection: .constant(.mixed), in: .mixed)
+        .defaultSize(CGSize(width: 500, height:  720))
+        .defaultWindowPlacement { content, context in
+            if let main = context.windows.first {
+                return WindowPlacement(.trailing(main))
+            }
+            
+            return WindowPlacement(.none)
+        }
      }
 }

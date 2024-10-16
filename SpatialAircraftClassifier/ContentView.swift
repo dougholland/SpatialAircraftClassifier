@@ -13,15 +13,13 @@ import Vision
 import PhotosUI
 
 struct ContentView: View {
+    @Environment(\.openWindow) private var openWindow
+    
     @State private var photosPickerItem: PhotosPickerItem? = nil
        
     @State private var image: Image? = nil
     
     @State private var model: AircraftClassifierModel? = nil
-    
-    private let minumumConfidence: Double = 0.8
-    
-    @State private var displayClassification: Bool = false
     
     @State private var aircraft: Aircraft? = nil
     
@@ -39,6 +37,12 @@ struct ContentView: View {
                             self.image = Image(uiImage: selectedImage)
                     
                             try await classifyImage(selectedImage)
+                            
+                            if self.aircraft != nil {
+                                print("openwindow: \(String(describing: aircraft?.name))")
+                                
+                                openWindow(id: "aircraftClassificationView", value: aircraft)
+                            }
                         }
                     }
                 }
@@ -48,12 +52,8 @@ struct ContentView: View {
                 image
                     .resizable()
                     .scaledToFit()
+                    .padding()
             }
-        }
-        .sheet(isPresented: $displayClassification) {
-            AircraftClassificationView(aircraft: aircraft, display: $displayClassification)
-                .presentationDetents([.fraction(0.5)])
-                .presentationDragIndicator(.visible)
         }
     }
     
@@ -76,8 +76,6 @@ struct ContentView: View {
                     print("classification: \(aircraft.name)")
                     
                     print("confidence: \(String(describing: results.first?.confidence))")
-                    
-                    displayClassification = true
                 }
             }
         }
@@ -90,5 +88,4 @@ struct ContentView: View {
 
 #Preview(windowStyle: .automatic) {
     ContentView()
-        .environment(AppModel())
 }
