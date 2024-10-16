@@ -8,19 +8,28 @@
 import SwiftUI
 
 struct AircraftClassificationView: View {
-    @Binding var aircraft: Aircraft?
+    //@Binding var aircraft: Aircraft?
+    @Binding var result: AircraftClassificationResult?
     
     var body: some View {
         VStack {
             HStack {
-                if let aircraft = aircraft {
+                if let result = result {
                     // display the aircraft specified by the raw value, e.g. F-15, F-16, etc.
-                    Image(aircraft.rawValue)
+                    Image(Aircraft(rawValue: result.identifier)!.rawValue)
                         .resizable()
                         .scaledToFit()
                     
-                    // display the aircraft name
-                    Text(aircraft.name)
+                    VStack(alignment: .leading) {
+                        // display the aircraft name
+                        Text(Aircraft(rawValue: result.identifier)!.name)
+                        
+                        // display the confidence
+                        Text("confidence: \(result.confidence * 100, specifier: "%.2f")%")
+                    }
+                    
+                } else {
+                    Text("aircraft is nil")
                 }
             }
             .frame(maxHeight: 200)
@@ -29,5 +38,5 @@ struct AircraftClassificationView: View {
 }
 
 #Preview {
-    AircraftClassificationView(aircraft: .constant(Aircraft(rawValue: "f16")))
+    AircraftClassificationView(result: .constant(.init(id: UUID.init(), identifier: "f15", confidence: 0.0)))
 }

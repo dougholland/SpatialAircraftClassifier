@@ -14,8 +14,8 @@ struct SpatialAircraftClassifierApp: App {
             ContentView()
         }
         
-        WindowGroup(id: "aircraftClassificationView", for: Aircraft.self) { aircraft in
-            AircraftClassificationView(aircraft: aircraft)
+        WindowGroup(id: "aircraftClassificationView", for: AircraftClassificationResult.self) { $result in
+            AircraftClassificationView(result: $result)
         }
         .defaultSize(CGSize(width: 500, height:  720))
         .defaultWindowPlacement { content, context in

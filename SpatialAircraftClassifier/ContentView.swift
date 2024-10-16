@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @State private var model: AircraftClassifierModel? = nil
     
-    @State private var aircraft: Aircraft? = nil
+    @State private var result: AircraftClassificationResult? = nil
     
     var body: some View {
         VStack {
@@ -38,10 +38,8 @@ struct ContentView: View {
                     
                             try await classifyImage(selectedImage)
                             
-                            if self.aircraft != nil {
-                                print("openwindow: \(String(describing: aircraft?.name))")
-                                
-                                openWindow(id: "aircraftClassificationView", value: aircraft)
+                            if let result = result {
+                                openWindow(id: "aircraftClassificationView", value: result)
                             }
                         }
                     }
@@ -70,13 +68,7 @@ struct ContentView: View {
         
         let request = VNCoreMLRequest(model: model) { request, error in
             if let results = request.results as? [VNClassificationObservation] {
-                if let aircraft = Aircraft(rawValue: results.first!.identifier) {
-                    self.aircraft = aircraft
-                    
-                    print("classification: \(aircraft.name)")
-                    
-                    print("confidence: \(String(describing: results.first?.confidence))")
-                }
+                self.result = AircraftClassificationResult(id: UUID.init(), identifier: results.first!.identifier, confidence: results.first!.confidence)
             }
         }
         
