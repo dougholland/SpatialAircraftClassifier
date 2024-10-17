@@ -1,4 +1,4 @@
-# SpatialAircraftClassifier
+# Spatial Aircraft Classifier
 
 Spatial SwiftUI sample app for visionOS that uses a Create ML image classifier to identify aircraft. The model has been trained to classify the following aircraft:
 
